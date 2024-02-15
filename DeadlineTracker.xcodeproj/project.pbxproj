@@ -15,6 +15,11 @@
 		D523F7342AE2AB31001DAEC1 /* MainPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D523F7332AE2AB31001DAEC1 /* MainPage.swift */; };
 		D523F7372AE2ABCD001DAEC1 /* DeadlineListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D523F7362AE2ABCD001DAEC1 /* DeadlineListCell.swift */; };
 		D523F73A2AE2B6C4001DAEC1 /* AddDeadlineSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D523F7392AE2B6C4001DAEC1 /* AddDeadlineSheetView.swift */; };
+		D59B6C172B7BD506003BB93F /* CardComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59B6C162B7BD506003BB93F /* CardComponent.swift */; };
+		D5B0183B2B7AB6FC0023AC88 /* GaugeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B0183A2B7AB6FC0023AC88 /* GaugeView.swift */; };
+		D5B94B6B2B7D64DD0057B3F1 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B94B6A2B7D64DD0057B3F1 /* View+Extensions.swift */; };
+		D5B94B6D2B7D65CD0057B3F1 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B94B6C2B7D65CD0057B3F1 /* Home.swift */; };
+		D5B94B6F2B7D69EE0057B3F1 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B94B6E2B7D69EE0057B3F1 /* Date+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +32,11 @@
 		D523F7332AE2AB31001DAEC1 /* MainPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPage.swift; sourceTree = "<group>"; };
 		D523F7362AE2ABCD001DAEC1 /* DeadlineListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeadlineListCell.swift; sourceTree = "<group>"; };
 		D523F7392AE2B6C4001DAEC1 /* AddDeadlineSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDeadlineSheetView.swift; sourceTree = "<group>"; };
+		D59B6C162B7BD506003BB93F /* CardComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardComponent.swift; sourceTree = "<group>"; };
+		D5B0183A2B7AB6FC0023AC88 /* GaugeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GaugeView.swift; sourceTree = "<group>"; };
+		D5B94B6A2B7D64DD0057B3F1 /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
+		D5B94B6C2B7D65CD0057B3F1 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
+		D5B94B6E2B7D69EE0057B3F1 /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +69,7 @@
 		D523F7222AE2AA96001DAEC1 /* DeadlineTracker */ = {
 			isa = PBXGroup;
 			children = (
+				D5B94B692B7D64A90057B3F1 /* Helpers */,
 				D523F7382AE2B698001DAEC1 /* Views */,
 				D523F7352AE2AB9F001DAEC1 /* Components */,
 				D523F7232AE2AA96001DAEC1 /* DeadlineTrackerApp.swift */,
@@ -83,6 +94,8 @@
 			isa = PBXGroup;
 			children = (
 				D523F7362AE2ABCD001DAEC1 /* DeadlineListCell.swift */,
+				D5B0183A2B7AB6FC0023AC88 /* GaugeView.swift */,
+				D59B6C162B7BD506003BB93F /* CardComponent.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -91,8 +104,18 @@
 			isa = PBXGroup;
 			children = (
 				D523F7392AE2B6C4001DAEC1 /* AddDeadlineSheetView.swift */,
+				D5B94B6C2B7D65CD0057B3F1 /* Home.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		D5B94B692B7D64A90057B3F1 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				D5B94B6A2B7D64DD0057B3F1 /* View+Extensions.swift */,
+				D5B94B6E2B7D69EE0057B3F1 /* Date+Extensions.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -166,11 +189,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				D523F7262AE2AA96001DAEC1 /* ContentView.swift in Sources */,
+				D5B94B6F2B7D69EE0057B3F1 /* Date+Extensions.swift in Sources */,
+				D5B94B6B2B7D64DD0057B3F1 /* View+Extensions.swift in Sources */,
+				D5B94B6D2B7D65CD0057B3F1 /* Home.swift in Sources */,
 				D523F7282AE2AA96001DAEC1 /* Item.swift in Sources */,
 				D523F7242AE2AA96001DAEC1 /* DeadlineTrackerApp.swift in Sources */,
+				D59B6C172B7BD506003BB93F /* CardComponent.swift in Sources */,
 				D523F7342AE2AB31001DAEC1 /* MainPage.swift in Sources */,
 				D523F73A2AE2B6C4001DAEC1 /* AddDeadlineSheetView.swift in Sources */,
 				D523F7372AE2ABCD001DAEC1 /* DeadlineListCell.swift in Sources */,
+				D5B0183B2B7AB6FC0023AC88 /* GaugeView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
