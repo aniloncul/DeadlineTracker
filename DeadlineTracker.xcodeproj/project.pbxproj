@@ -20,6 +20,9 @@
 		D5B94B6B2B7D64DD0057B3F1 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B94B6A2B7D64DD0057B3F1 /* View+Extensions.swift */; };
 		D5B94B6D2B7D65CD0057B3F1 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B94B6C2B7D65CD0057B3F1 /* Home.swift */; };
 		D5B94B6F2B7D69EE0057B3F1 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B94B6E2B7D69EE0057B3F1 /* Date+Extensions.swift */; };
+		D5B94B712B8103460057B3F1 /* FirstTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B94B702B8103460057B3F1 /* FirstTabView.swift */; };
+		D5B94B732B8103880057B3F1 /* RouterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B94B722B8103880057B3F1 /* RouterView.swift */; };
+		D5B94B752B81045A0057B3F1 /* SecondTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B94B742B81045A0057B3F1 /* SecondTabView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +40,13 @@
 		D5B94B6A2B7D64DD0057B3F1 /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
 		D5B94B6C2B7D65CD0057B3F1 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
 		D5B94B6E2B7D69EE0057B3F1 /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
+		D5B94B702B8103460057B3F1 /* FirstTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTabView.swift; sourceTree = "<group>"; };
+		D5B94B722B8103880057B3F1 /* RouterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouterView.swift; sourceTree = "<group>"; };
+		D5B94B742B81045A0057B3F1 /* SecondTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondTabView.swift; sourceTree = "<group>"; };
+		D5B94B772B81200E0057B3F1 /* Grayfel-Condensed-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Grayfel-Condensed-Medium.otf"; path = "DeadlineTracker/grayfel-1/Grayfel-Condensed-Medium.otf"; sourceTree = SOURCE_ROOT; };
+		D5B94B782B81201F0057B3F1 /* Grayfel-Extended-Demi.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Grayfel-Extended-Demi.otf"; path = "DeadlineTracker/grayfel-1/Grayfel-Extended-Demi.otf"; sourceTree = SOURCE_ROOT; };
+		D5B94B792B8120350057B3F1 /* Grayfel-Condensed-Book.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Grayfel-Condensed-Book.otf"; path = "DeadlineTracker/grayfel-1/Grayfel-Condensed-Book.otf"; sourceTree = SOURCE_ROOT; };
+		D5B94B7A2B8121BB0057B3F1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +79,8 @@
 		D523F7222AE2AA96001DAEC1 /* DeadlineTracker */ = {
 			isa = PBXGroup;
 			children = (
+				D5B94B7A2B8121BB0057B3F1 /* Info.plist */,
+				D5B94B762B811FFB0057B3F1 /* Fonts */,
 				D5B94B692B7D64A90057B3F1 /* Helpers */,
 				D523F7382AE2B698001DAEC1 /* Views */,
 				D523F7352AE2AB9F001DAEC1 /* Components */,
@@ -105,6 +117,9 @@
 			children = (
 				D523F7392AE2B6C4001DAEC1 /* AddDeadlineSheetView.swift */,
 				D5B94B6C2B7D65CD0057B3F1 /* Home.swift */,
+				D5B94B702B8103460057B3F1 /* FirstTabView.swift */,
+				D5B94B722B8103880057B3F1 /* RouterView.swift */,
+				D5B94B742B81045A0057B3F1 /* SecondTabView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -116,6 +131,16 @@
 				D5B94B6E2B7D69EE0057B3F1 /* Date+Extensions.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		D5B94B762B811FFB0057B3F1 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				D5B94B772B81200E0057B3F1 /* Grayfel-Condensed-Medium.otf */,
+				D5B94B782B81201F0057B3F1 /* Grayfel-Extended-Demi.otf */,
+				D5B94B792B8120350057B3F1 /* Grayfel-Condensed-Book.otf */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -195,9 +220,12 @@
 				D523F7282AE2AA96001DAEC1 /* Item.swift in Sources */,
 				D523F7242AE2AA96001DAEC1 /* DeadlineTrackerApp.swift in Sources */,
 				D59B6C172B7BD506003BB93F /* CardComponent.swift in Sources */,
+				D5B94B712B8103460057B3F1 /* FirstTabView.swift in Sources */,
+				D5B94B732B8103880057B3F1 /* RouterView.swift in Sources */,
 				D523F7342AE2AB31001DAEC1 /* MainPage.swift in Sources */,
 				D523F73A2AE2B6C4001DAEC1 /* AddDeadlineSheetView.swift in Sources */,
 				D523F7372AE2ABCD001DAEC1 /* DeadlineListCell.swift in Sources */,
+				D5B94B752B81045A0057B3F1 /* SecondTabView.swift in Sources */,
 				D5B0183B2B7AB6FC0023AC88 /* GaugeView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -335,6 +363,7 @@
 				DEVELOPMENT_TEAM = SZASM9TWAT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DeadlineTracker/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -364,6 +393,7 @@
 				DEVELOPMENT_TEAM = SZASM9TWAT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DeadlineTracker/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
