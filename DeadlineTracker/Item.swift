@@ -10,6 +10,7 @@ import SwiftData
 
 @Model
 final class Item {
+  
     var timestamp: Date
     var deadlineName: String
     var deadlineDate: Date

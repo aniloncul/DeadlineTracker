@@ -17,6 +17,15 @@ struct AddDeadlineSheetView: View {
     @State var deadline: String = ""
     @State var deadlineDate = Date()
     
+    private let dateRange: ClosedRange<Date> = {
+        let calendar = Calendar.current
+        let minRange = calendar.date(byAdding: .minute, value: +1, to: Date())!
+        let maxRange = calendar.date(byAdding: .year, value: 10, to:Date())!
+        
+        let timeRange = minRange...maxRange
+        return timeRange
+    }()
+    
     var body: some View {
         VStack{
             
@@ -33,6 +42,7 @@ struct AddDeadlineSheetView: View {
             DatePicker(
             "Select Deadline",
             selection: $deadlineDate,
+            in: dateRange,
             displayedComponents: [.date, .hourAndMinute]
             ).datePickerStyle(.compact)
             
@@ -54,6 +64,7 @@ struct AddDeadlineSheetView: View {
         
         
     }
+
     
     private func addItem() {
         withAnimation {

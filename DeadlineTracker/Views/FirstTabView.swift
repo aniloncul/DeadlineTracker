@@ -62,7 +62,7 @@ struct FirstTabView: View {
                         .padding(.leading, 16)
                         
                         Spacer()
-                            
+                            .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/)
                         
                         
                         Rectangle()
