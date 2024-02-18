@@ -56,16 +56,16 @@ struct DeadlineListCell: View {
                 Text(deadlineHour)
                     .hSpacing(.leading)
                 
-                Gauge(
-                    value: timeIntervalDouble ,
-                    in: 0...maxTimeInterval,
-                    label: {
-                        Text("\(deadlineTime)");
-                    },
-                    currentValueLabel: {
-                        Text(String(format: "%.0f%%", (timeIntervalDouble / maxTimeInterval) * 100))
-                    }
-                )
+//                Gauge(
+//                    value: timeIntervalDouble ,
+//                    in: 0...maxTimeInterval,
+//                    label: {
+//                        Text("\(deadlineTime)");
+//                    },
+//                    currentValueLabel: {
+//                        Text(String(format: "%.0f%%", (timeIntervalDouble / maxTimeInterval) * 100))
+//                    }
+//                )
                 
                 .padding(12)
                 

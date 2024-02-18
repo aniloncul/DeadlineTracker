@@ -106,6 +106,7 @@ struct FirstTabView: View {
                                                         deadlineHour: item.deadlineDate.formatted(.dateTime.hour().minute()),
                                                         deadline: item.deadlineDate
                                                     )
+                                
                                                     .background(RoundedRectangle(cornerRadius: 10).foregroundColor(colorArray[index % colorArray.count]))
                             
                             
