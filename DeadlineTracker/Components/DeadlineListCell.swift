@@ -20,6 +20,8 @@ struct DeadlineListCell: View {
     @State var currentTimeInterval: String = ""
     @State var timeRemaining: TimeInterval = 0
     @State var deadlineHour: String = ""
+    @State var deadlineType: String = ""
+    @State var deadlineTypeColor: Color = .accentColor
     
     @State private var currentTime = Date()
     @State private var days = 0
@@ -48,6 +50,16 @@ struct DeadlineListCell: View {
     var body: some View {
         VStack {
             VStack{
+                Text(deadlineType)
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(deadlineTypeColor)
+                    ).hSpacing(.topLeading)
+                    .tint(.white)
+                
+              
+                
+                
                 Text(title)
                     .foregroundColor(deadlinePassed ? .red : .primary)
                     .strikethrough(deadlinePassed)
@@ -56,16 +68,16 @@ struct DeadlineListCell: View {
                 Text(deadlineHour)
                     .hSpacing(.leading)
                 
-//                Gauge(
-//                    value: timeIntervalDouble ,
-//                    in: 0...maxTimeInterval,
-//                    label: {
-//                        Text("\(deadlineTime)");
-//                    },
-//                    currentValueLabel: {
-//                        Text(String(format: "%.0f%%", (timeIntervalDouble / maxTimeInterval) * 100))
-//                    }
-//                )
+                Gauge(
+                    value: timeIntervalDouble ,
+                    in: 0...maxTimeInterval,
+                    label: {
+                        Text("\(deadlineTime)");
+                    },
+                    currentValueLabel: {
+                        Text(String(format: "%.0f%%", (timeIntervalDouble / maxTimeInterval) * 100))
+                    }
+                ).tint(.white)
                 
                 .padding(12)
                 
@@ -139,6 +151,6 @@ struct DeadlineListCell: View {
 
 
 
-//#Preview {
-//    DeadlineListCell(/*now: NSDate.now as NSDate*/, deadline: <#Date#>)
-////}
+#Preview {
+    DeadlineListCell(deadline: Date())
+}

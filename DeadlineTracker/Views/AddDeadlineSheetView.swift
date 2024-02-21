@@ -16,6 +16,45 @@ struct AddDeadlineSheetView: View {
     
     @State var deadline: String = ""
     @State var deadlineDate = Date()
+    @State var selectedCategory: Category = .socialEvent
+    @State var selectedDeadlineType: Item.DeadlineType = .socialEvent
+    
+   
+       
+    enum  Category: String, CaseIterable, Identifiable {
+        var id: Category { self }
+        
+        case payment, socialEvent, dailyRoutine, workReminder
+        
+        var selectedCategoryString: String {
+            switch self {
+            case .payment:
+                return "Payment"
+            case .socialEvent:
+                return "Social Event"
+            case .dailyRoutine:
+                return "Daily Routine"
+            case .workReminder:
+                return "Work Reminder"
+            }
+        }
+        
+        var selectedCategoryColor: Color {
+            switch self {
+            case .payment:
+                return Color.green
+            case .socialEvent:
+                return Color.red
+            case .dailyRoutine:
+                return Color.yellow
+            case .workReminder:
+                return Color.blue
+            }
+        }
+
+    }
+    
+  
     
     private let dateRange: ClosedRange<Date> = {
         let calendar = Calendar.current
@@ -26,11 +65,55 @@ struct AddDeadlineSheetView: View {
         return timeRange
     }()
     
+    
+    
     var body: some View {
+        
         VStack{
             
-            Text("Enter your Deadline")
-                .padding(EdgeInsets(top: 12, leading: 12, bottom: 12, trailing: 12))
+            HStack {
+                Picker("Select Deadline Category", selection: $selectedCategory) {
+                    ForEach(Category.allCases, id: \.self) { category in
+                        Text(category.selectedCategoryString)
+                            .tag(category)
+                            
+                    }
+                }
+                .pickerStyle(.menu)
+                .background(
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(selectedCategory.selectedCategoryColor)
+                )
+                .tint(.white)
+                
+
+                
+            }
+            .hSpacing(.topLeading)
+            
+            HStack {
+                Picker("Select Deadline Category", selection:
+                $selectedDeadlineType) {
+                    ForEach(Item.DeadlineType.allCases, id: \.self) { category in
+                        Text(category.selectedDeadlineTypeString)
+                            .tag(category)
+                            
+                    }
+                }
+                .pickerStyle(.menu)
+                .background(
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(selectedDeadlineType.selectedDeadlineTypeColor)
+                )
+                .tint(.white)
+                
+
+                
+            }
+            .hSpacing(.topLeading)
+            
+            
+            
             TextField("Enter your deadline",
                       text: $deadline
             )
@@ -68,7 +151,7 @@ struct AddDeadlineSheetView: View {
     
     private func addItem() {
         withAnimation {
-            let newItem = Item(timestamp: Date(), deadlineName: deadline, deadlineDate: deadlineDate)
+            let newItem = Item(timestamp: Date(), deadlineName: deadline, deadlineDate: deadlineDate, category: selectedCategory.selectedCategoryString, deadlineType: selectedDeadlineType ?? .dailyRoutine)
             modelContext.insert(newItem)
         }
     }

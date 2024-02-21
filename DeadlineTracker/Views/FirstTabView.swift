@@ -27,6 +27,9 @@ struct FirstTabView: View {
     @State private var weekSlider: [[Date.WeekDay]] = []
     @State private var currentWeekIndex: Int = 0
     
+    @State private var selectedCategory: Category?
+    @State private var selectedDeadlineType: Item.DeadlineType?
+    
     enum DeadlineHeader {
         case Today, Upcoming, Overdue
     }
@@ -37,7 +40,7 @@ struct FirstTabView: View {
     
     private var colorArray = [Color.blue, Color.gray, Color.indigo, Color.cyan ]
     
-
+    
     var body: some View {
         NavigationView {
             
@@ -59,21 +62,24 @@ struct FirstTabView: View {
                             }
                         }
                         .padding(2)
-                        .padding(.leading, 16)
-                        
-                        Spacer()
-                            .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/)
-                        
+                        .padding(.leading, 16).frame(width: 160)
                         
                         Rectangle()
-                                        .frame(width: 1, height: 96)
-                                        .foregroundColor(Color.black)
-                                       
-                        VStack {
-                            HStack {
-                                Text("işte bir ieyler gelecek ne biliyim")
-                                    .padding(.trailing, 16)
-                            }
+                            .frame(width: 1, height: 96)
+                            .foregroundColor(Color.black)
+                            
+                        
+                        VStack(alignment: .trailing) {
+                            
+                            Text("Social Events: \(socialEvents.count)")
+                                .padding(.trailing, 16)
+                            Text("Payments: \(payments.count)")
+                                .padding(.trailing, 16)
+                            Text("Daily Routines: \(dailyRoutines.count)")
+                                .padding(.trailing, 16)
+                            Text("Work Reminders: \(workReminders.count)")
+                                .padding(.trailing, 16)
+                            
                         }
                         
                     }
@@ -81,41 +87,46 @@ struct FirstTabView: View {
                     
                 }
                 
-                ScrollView() {
-                    VStack(spacing: 24){
-                        Picker("Select Deadline", selection: $deadlineHeaderPicker) {
-                            Text("Today").tag(DeadlineHeader.Today)
-                            Text("Upcoming").tag(DeadlineHeader.Upcoming)
-                            Text("Overdue").tag(DeadlineHeader.Overdue)
+                VStack {
+                    List {
+                        ForEach(socialEvents) {item in
+                            Text(item.deadlineName)
                             
                         }
-                        .pickerStyle(.segmented)
+                    }
+                }
+                
+                
+                VStack(spacing: 24){
+                    Picker("Select Deadline", selection: $deadlineHeaderPicker) {
+                        Text("Today").tag(DeadlineHeader.Today)
+                        Text("Upcoming").tag(DeadlineHeader.Upcoming)
+                        Text("Overdue").tag(DeadlineHeader.Overdue)
                         
+                    }
+                    .pickerStyle(.segmented)
+                    
+                    List {
                         ForEach(Array(filteredItems.enumerated().sorted { $0.element.deadlineDate < $1.element.deadlineDate }), id: \.element.id) { (index, item) in
-                                                    let currentTimeInterval = item.deadlineDate.timeIntervalSince(Date())
-                                                    let maxTimeInterval = item.deadlineDate.timeIntervalSince(item.timestamp)
-                                                    let totalSeconds = Double(maxTimeInterval)
-                                                    let formattedTime = formatTimeInterval(currentTimeInterval)
-                                                    
-                                                    DeadlineListCell(
-                                                        title: item.deadlineName,
-                                                        deadlineTime: "\(item.deadlineDate.formatted(.dateTime.day().month().year().hour().minute().second()))",
-                                                        timeIntervalDouble: currentTimeInterval,
-                                                        maxTimeInterval: totalSeconds,
-                                                        timeInterval: formattedTime,
-                                                        deadlineHour: item.deadlineDate.formatted(.dateTime.hour().minute()),
-                                                        deadline: item.deadlineDate
-                                                    )
-                                
-                                                    .background(RoundedRectangle(cornerRadius: 10).foregroundColor(colorArray[index % colorArray.count]))
+                            let currentTimeInterval = item.deadlineDate.timeIntervalSince(Date())
+                            let maxTimeInterval = item.deadlineDate.timeIntervalSince(item.timestamp)
+                            let totalSeconds = Double(maxTimeInterval)
+                            let formattedTime = formatTimeInterval(currentTimeInterval)
+                            
+                            DeadlineListCell(
+                                title: item.deadlineName, deadlineTime: "\(item.deadlineDate.formatted(.dateTime.day().month().year().hour().minute().second()))", timeIntervalDouble: currentTimeInterval, maxTimeInterval: totalSeconds, timeInterval: formattedTime, deadlineHour: item.deadlineDate.formatted(.dateTime.hour().minute()),  deadlineType: item.deadlineType.selectedDeadlineTypeString, deadlineTypeColor: item.deadlineType.selectedDeadlineTypeColor, deadline: item.deadlineDate
+                            )
+                            
+                            .background(RoundedRectangle(cornerRadius: 10).foregroundColor(colorArray[index % colorArray.count]))
                             
                             
                             
                         }
                         .onDelete(perform: deleteItems)
-                    }
-                }
-                .hSpacing(.center)
+                    }}
+                
+                
+                
                 
                 
                 .padding(12)
@@ -127,10 +138,10 @@ struct FirstTabView: View {
                         Button(action: {showLanguageListView = true}) {
                             Label("Add Item", systemImage: "book")
                         }
-                    
+                        
                         
                     }
-            }
+                }
             }
         }
         .sheet(isPresented: $showLanguageListView, content: {
@@ -138,31 +149,49 @@ struct FirstTabView: View {
         })
         
     }
+    
+    
+    private var socialEvents: [Item] {
+        items.filter { $0.deadlineType == .socialEvent }
+    }
+    
+    private var workReminders: [Item] {
+        items.filter { $0.deadlineType == .workReminder }
+    }
+    
+    private var dailyRoutines: [Item] {
+        items.filter { $0.deadlineType == .dailyRoutine }
+    }
+    
+    private var payments: [Item] {
+        items.filter { $0.deadlineType == .payment }
+    }
+    
     private var filteredItems: [Item] {
         let startOfNextDay = Calendar.current.startOfDay(for: Date().addingTimeInterval(24 * 60 * 60))
-
-            switch deadlineHeaderPicker {
-            case .Today:
-                return items.filter { Calendar.current.isDateInToday($0.deadlineDate) }
-            case .Upcoming:
-                return items.filter { $0.deadlineDate >= startOfNextDay }
-            case .Overdue:
-                return items.filter { $0.deadlineDate < Date() }
-            }
+        
+        switch deadlineHeaderPicker {
+        case .Today:
+            return items.filter { Calendar.current.isDateInToday($0.deadlineDate) }
+        case .Upcoming:
+            return items.filter { $0.deadlineDate >= startOfNextDay }
+        case .Overdue:
+            return items.filter { $0.deadlineDate < Date() }
         }
+    }
     
     
     var customDateFormatter: DateFormatter {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "dd.MM"
-            return formatter
-        }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd.MM"
+        return formatter
+    }
     
     var MMMFormatter: DateFormatter {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "MMM"
-            return formatter
-        }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM"
+        return formatter
+    }
     
     
     
@@ -183,9 +212,9 @@ struct FirstTabView: View {
                 .textScale(.secondary)
                 .foregroundStyle(.gray)
         }
-                .padding(15)
-                .hSpacing(.leading)
-                .background(.ultraThinMaterial)
+        .padding(15)
+        .hSpacing(.leading)
+        .background(.ultraThinMaterial)
     }
     
     private func date2Number (_ date: Date) -> Int {
@@ -193,9 +222,9 @@ struct FirstTabView: View {
         let components = calendar.dateComponents([.day, .hour, .minute, .second], from: date)
         
         if let day = components.day, let hour = components.hour, let minute = components.minute, let second = components.second {
-                let result = day * 1000 + hour * 100 + minute * 10 + second
-                return result
-            }
+            let result = day * 1000 + hour * 100 + minute * 10 + second
+            return result
+        }
         
         return 0
     }
@@ -204,30 +233,30 @@ struct FirstTabView: View {
         let secondsInMinute: TimeInterval = 60
         let secondsInHour: TimeInterval = 3600
         let secondsInDay: TimeInterval = 86400
-
+        
         let days = Int(totalSeconds / secondsInDay)
         let hours = Int((totalSeconds.truncatingRemainder(dividingBy: secondsInDay)) / secondsInHour)
         let minutes = Int((totalSeconds.truncatingRemainder(dividingBy: secondsInHour)) / secondsInMinute)
         let seconds = Int(totalSeconds.truncatingRemainder(dividingBy: secondsInMinute))
-
+        
         return String(format: "%02d:%02d:%02d:%02d", days, hours, minutes, seconds)
     }
-
+    
     private func openAddSheetView() {
         
         withAnimation {
-            let newItem = Item(timestamp: Date(), deadlineName: String(), deadlineDate: Date())
+            let newItem = Item(timestamp: Date(), deadlineName: String(), deadlineDate: Date(), category: String(), deadlineType: selectedDeadlineType ?? .dailyRoutine)
             modelContext.insert(newItem)
         }
     }
-
+    
     private func addItem() {
         withAnimation {
-            let newItem = Item(timestamp: Date(), deadlineName: String(), deadlineDate: Date())
+            let newItem = Item(timestamp: Date(), deadlineName: String(), deadlineDate: Date(), category: String(), deadlineType: selectedDeadlineType ?? .dailyRoutine)
             modelContext.insert(newItem)
         }
     }
-
+    
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
