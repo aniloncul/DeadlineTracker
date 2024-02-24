@@ -16,46 +16,10 @@ struct AddDeadlineSheetView: View {
     
     @State var deadline: String = ""
     @State var deadlineDate = Date()
-    @State var selectedCategory: Category = .socialEvent
+    @State var selectedImportance: Item.Importance = .lessImportant
     @State var selectedDeadlineType: Item.DeadlineType = .socialEvent
     
-   
-       
-    enum  Category: String, CaseIterable, Identifiable {
-        var id: Category { self }
-        
-        case payment, socialEvent, dailyRoutine, workReminder
-        
-        var selectedCategoryString: String {
-            switch self {
-            case .payment:
-                return "Payment"
-            case .socialEvent:
-                return "Social Event"
-            case .dailyRoutine:
-                return "Daily Routine"
-            case .workReminder:
-                return "Work Reminder"
-            }
-        }
-        
-        var selectedCategoryColor: Color {
-            switch self {
-            case .payment:
-                return Color.green
-            case .socialEvent:
-                return Color.red
-            case .dailyRoutine:
-                return Color.yellow
-            case .workReminder:
-                return Color.blue
-            }
-        }
-
-    }
-    
-  
-    
+     
     private let dateRange: ClosedRange<Date> = {
         let calendar = Calendar.current
         let minRange = calendar.date(byAdding: .minute, value: +1, to: Date())!
@@ -69,65 +33,62 @@ struct AddDeadlineSheetView: View {
     
     var body: some View {
         
-        VStack{
+        Form{
             
-            HStack {
-                Picker("Select Deadline Category", selection: $selectedCategory) {
-                    ForEach(Category.allCases, id: \.self) { category in
-                        Text(category.selectedCategoryString)
-                            .tag(category)
+           
+            Section {
+                HStack(spacing: 20) {
+                    Circle().fill(selectedDeadlineType.selectedDeadlineTypeColor).frame(width: 15)
+                    Picker("Deadline Type:", selection:
+                            $selectedDeadlineType) {
+                        ForEach(Item.DeadlineType.allCases, id: \.self) { category in
+                            Text(category.selectedDeadlineTypeString)
+                                .tag(category)
                             
+                        }
                     }
+                            .pickerStyle(.menu)
+                    
                 }
-                .pickerStyle(.menu)
+            }
+         
+            
+            
+            Section {
+                TextField("Enter your deadline",
+                          text: $deadline
+                )
+                
+                .padding(EdgeInsets(top: 12, leading: 12, bottom: 12, trailing: 12))
+                .font(.headline).keyboardType(.default)
+            }
+                Section {
+                
+                DatePicker(
+                    "Select Deadline",
+                    selection: $deadlineDate,
+                    in: dateRange,
+                    displayedComponents: [.date, .hourAndMinute]
+                ).datePickerStyle(.compact)
+            }
+            
+            Section {
+                Picker("Importance", selection: $selectedImportance) {
+                    ForEach(Item.Importance.allCases, id: \.self) { importance in
+                        Text(importance.selectedImportant)
+                            .tag(importance)
+                             
+                   }
+                             
+                }
+                .pickerStyle(.segmented)
                 .background(
                     RoundedRectangle(cornerRadius: 10)
-                        .fill(selectedCategory.selectedCategoryColor)
+                        .fill(Color.teal)
                 )
                 .tint(.white)
-                
-
-                
-            }
+          }
             .hSpacing(.topLeading)
-            
-            HStack {
-                Picker("Select Deadline Category", selection:
-                $selectedDeadlineType) {
-                    ForEach(Item.DeadlineType.allCases, id: \.self) { category in
-                        Text(category.selectedDeadlineTypeString)
-                            .tag(category)
-                            
-                    }
-                }
-                .pickerStyle(.menu)
-                .background(
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(selectedDeadlineType.selectedDeadlineTypeColor)
-                )
-                .tint(.white)
-                
-
-                
-            }
-            .hSpacing(.topLeading)
-            
-            
-            
-            TextField("Enter your deadline",
-                      text: $deadline
-            )
-            .border(Color.black)
-            .padding(EdgeInsets(top: 12, leading: 12, bottom: 12, trailing: 12))
-            
-            .font(.title)
-            
-            DatePicker(
-            "Select Deadline",
-            selection: $deadlineDate,
-            in: dateRange,
-            displayedComponents: [.date, .hourAndMinute]
-            ).datePickerStyle(.compact)
             
             
             Button(action: {
@@ -151,7 +112,7 @@ struct AddDeadlineSheetView: View {
     
     private func addItem() {
         withAnimation {
-            let newItem = Item(timestamp: Date(), deadlineName: deadline, deadlineDate: deadlineDate, category: selectedCategory.selectedCategoryString, deadlineType: selectedDeadlineType ?? .dailyRoutine)
+            let newItem = Item(timestamp: Date(), deadlineName: deadline, deadlineDate: deadlineDate,  deadlineType: selectedDeadlineType , importance: selectedImportance)
             modelContext.insert(newItem)
         }
     }

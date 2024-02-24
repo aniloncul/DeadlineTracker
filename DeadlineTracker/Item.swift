@@ -14,15 +14,17 @@ final class Item {
     var timestamp: Date
     var deadlineName: String
     var deadlineDate: Date
-    var category: String
+   
     var deadlineType: DeadlineType
+    var importance: Importance
     
-    init(timestamp: Date, deadlineName: String, deadlineDate: Date, category: String, deadlineType: DeadlineType) {
+    init(timestamp: Date, deadlineName: String, deadlineDate: Date,  deadlineType: DeadlineType, importance: Importance) {
         self.timestamp = timestamp
         self.deadlineName = deadlineName
         self.deadlineDate = deadlineDate
-        self.category = category
+    
         self.deadlineType = deadlineType
+        self.importance = importance
     }
     
     
@@ -58,5 +60,23 @@ final class Item {
         }
 
     }
+    
+    enum Importance: String, Codable, CaseIterable, Identifiable {
+        var id: Importance { self }
+        
+        case lessImportant, midImportant, highImportant
+        
+        var selectedImportant: String {
+            switch self {
+            case .lessImportant:
+                return "!"
+            case .midImportant:
+                return "!!"
+            case .highImportant:
+                return "!!!"
+            }
+        }
+    }
+    
 
 }

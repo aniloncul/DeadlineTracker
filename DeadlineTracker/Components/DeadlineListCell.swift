@@ -13,7 +13,7 @@ struct DeadlineListCell: View {
     @Query var items: [Item]
     
     @State var title: String = ""
-    @State var deadlineTime: String = ""
+    @State var deadlineTime = Date()
     @State var timeIntervalDouble: Double = 0
     @State var maxTimeInterval: Double = 0
     @State var timeInterval = String()
@@ -22,6 +22,7 @@ struct DeadlineListCell: View {
     @State var deadlineHour: String = ""
     @State var deadlineType: String = ""
     @State var deadlineTypeColor: Color = .accentColor
+    @State var importance = ""
     
     @State private var currentTime = Date()
     @State private var days = 0
@@ -35,73 +36,78 @@ struct DeadlineListCell: View {
     
     var deadline: Date
     
-    func updateTimeRemaining() {
-        let remaining = Calendar.current.dateComponents([.day, .hour,.minute,.second], from: currentTime, to: deadline)
-        let day = remaining.day ?? 0
-        let hour = remaining.hour ?? 0
-        let minute = remaining.minute ?? 0
-        let second = remaining.second ?? 0
-        interval = "\(day) days \(hour) hours \(minute) minutes \(second) seconds "
-        
-    }
-    
     
     
     var body: some View {
-        VStack {
-            VStack{
-                Text(deadlineType)
-                    .background(
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(deadlineTypeColor)
-                    ).hSpacing(.topLeading)
-                    .tint(.white)
-                
-              
-                
-                
-                Text(title)
-                    .foregroundColor(deadlinePassed ? .red : .primary)
-                    .strikethrough(deadlinePassed)
-                    .bold()
-                    .hSpacing(.leading)
-                Text(deadlineHour)
-                    .hSpacing(.leading)
-                
+        VStack(spacing: 6) {
+            
+            //
+            //                Text(deadlineType)
+            //                    .background(
+            //                        RoundedRectangle(cornerRadius: 10)
+            //                            .fill(deadlineTypeColor)
+            //                    ).hSpacing(.topLeading)
+            //                    .tint(.white)
+            
+            Text(title)
+                .font(.title)
+                .font(Font.custom("Grayfeld-Condensed-Book.otf", fixedSize: 20))
+                .foregroundColor(deadlinePassed ? .red : .primary)
+                .strikethrough(deadlinePassed)
+                .hSpacing(.leading)
+                .padding(8)
+            
+            
+            
+            
+            if !deadlinePassed {
                 Gauge(
                     value: timeIntervalDouble ,
                     in: 0...maxTimeInterval,
                     label: {
-                        Text("\(deadlineTime)");
+                        //                            Text("\(deadlineTime)");
                     },
                     currentValueLabel: {
                         Text(String(format: "%.0f%%", (timeIntervalDouble / maxTimeInterval) * 100))
+                    },
+                    minimumValueLabel: {
+                        Text(deadlineHour)
+                    }, maximumValueLabel: {
+                        Text("")
+                        
                     }
-                ).tint(.white)
-                
+                )
+                .tint(
+                    LinearGradient(
+                        gradient: Gradient(colors: [Color.blue, Color.green]),
+                        startPoint: .trailing,
+                        endPoint: .leading
+                    )
+                )
                 .padding(12)
-                
-                
-                if !deadlinePassed {
-                    Text(interval)
-                        .hSpacing(.center)
-                    
-                    
-                }
-                
             }
             
-            
-            .padding(12) // Add padding
-           
-            
+             if !deadlinePassed {
+                Text(interval)
+                    .hSpacing(.center)
+            }
         }.onReceive(timer, perform: { _ in
-            updateTimeRemaining()
-        })
+            withAnimation {
+                updateTimeRemaining()
+            }
+        }
+        )
         
         
     }
-    
+    private var currentHourMinute: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH:mm"
+        
+        let currentTime = Date()
+        let formattedTime = dateFormatter.string(from: currentTime)
+        return formattedTime
+    }
     
     private var formattedTime: String {
         let formatter = DateComponentsFormatter()
@@ -114,38 +120,39 @@ struct DeadlineListCell: View {
         return timeIntervalDouble < 0
     }
     
-    //    private func updateComponents(from remainingTime: Double) {
-    //            let secondsInMinute: Double = 60
-    //            let secondsInHour: Double = 3600
-    //            let secondsInDay: Double = 86400
-    //
-    //        let remaining = Calendar.current.dateComponents([.hour,.minute,.second], from: Date(), to: deadline)
-    //        let hour = remaining.hour ?? 0
-    //        let minute = remaining.minute ?? 0
-    //        let second = remaining.second ?? 0
-    //        timeRemaining = "\(hour) : \(minute):\(second) "
-    //
-    //
-    //
-    //            days = Int(remainingTime / secondsInDay)
-    //            hours = Int((remainingTime.truncatingRemainder(dividingBy: secondsInDay)) / secondsInHour)
-    //            minutes = Int((remainingTime.truncatingRemainder(dividingBy: secondsInHour)) / secondsInMinute)
-    //            seconds = Int(remainingTime.truncatingRemainder(dividingBy: secondsInMinute))
-    //
-    //        }
-    func calculateRemainingTime() -> String {
-        let remainingTime = timeIntervalDouble - NSDate.timeIntervalSinceReferenceDate
-        let timeRemaining = max(remainingTime, 0)
+    
+    func updateTimeRemaining() {
+        let remaining = Calendar.current.dateComponents([.day, .hour,.minute,.second], from: Date(), to: deadlineTime)
+        let day = remaining.day ?? 0
+        let hour = remaining.hour ?? 0
+        let minute = remaining.minute ?? 0
+        let second = remaining.second ?? 0
         
-        // Convert timeRemaining to a user-friendly format (e.g., hours, minutes, seconds).
-        let formatter = DateComponentsFormatter()
-        formatter.allowedUnits = [.hour, .minute, .second]
-        formatter.unitsStyle = .abbreviated
-        return formatter.string(from: timeRemaining) ?? "Expired"
+        if (day>0) {
+            interval = "\(day) days \(hour) hours \(minute) minutes \(second) seconds "
+        } else {
+            interval = "\(hour) hours \(minute) minutes \(second) seconds "
+        }
+        
+        
     }
     
     
-}
+ 
+    }
+//    func calculateRemainingTime() -> String {
+//        let remainingTime = timeIntervalDouble - NSDate.timeIntervalSinceReferenceDate
+//        let timeRemaining = max(remainingTime, 0)
+//        
+//        // Convert timeRemaining to a user-friendly format (e.g., hours, minutes, seconds).
+//        let formatter = DateComponentsFormatter()
+//        formatter.allowedUnits = [.hour, .minute, .second]
+//        formatter.unitsStyle = .abbreviated
+//        return formatter.string(from: timeRemaining) ?? "Expired"
+//    }
+    
+    
+
 
 
 
