@@ -18,6 +18,10 @@
 		D59B6C172B7BD506003BB93F /* CardComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = D59B6C162B7BD506003BB93F /* CardComponent.swift */; };
 		D5A3B40A2B824F0400122F96 /* Calendar+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A3B4092B824F0400122F96 /* Calendar+Extensions.swift */; };
 		D5B0183B2B7AB6FC0023AC88 /* GaugeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B0183A2B7AB6FC0023AC88 /* GaugeView.swift */; };
+		D5B200D52B8CEE1F0042D5C8 /* SwiftUIIntrospect in Frameworks */ = {isa = PBXBuildFile; productRef = D5B200D42B8CEE1F0042D5C8 /* SwiftUIIntrospect */; };
+		D5B200D72B8CEE1F0042D5C8 /* SwiftUIIntrospect-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = D5B200D62B8CEE1F0042D5C8 /* SwiftUIIntrospect-Dynamic */; };
+		D5B200D92B8CEE1F0042D5C8 /* SwiftUIIntrospect-Static in Frameworks */ = {isa = PBXBuildFile; productRef = D5B200D82B8CEE1F0042D5C8 /* SwiftUIIntrospect-Static */; };
+		D5B200DD2B8CF6E40042D5C8 /* SegmentedPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B200DC2B8CF6E30042D5C8 /* SegmentedPicker.swift */; };
 		D5B94B6B2B7D64DD0057B3F1 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B94B6A2B7D64DD0057B3F1 /* View+Extensions.swift */; };
 		D5B94B6D2B7D65CD0057B3F1 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B94B6C2B7D65CD0057B3F1 /* Home.swift */; };
 		D5B94B6F2B7D69EE0057B3F1 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B94B6E2B7D69EE0057B3F1 /* Date+Extensions.swift */; };
@@ -39,6 +43,7 @@
 		D59B6C162B7BD506003BB93F /* CardComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardComponent.swift; sourceTree = "<group>"; };
 		D5A3B4092B824F0400122F96 /* Calendar+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Calendar+Extensions.swift"; sourceTree = "<group>"; };
 		D5B0183A2B7AB6FC0023AC88 /* GaugeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GaugeView.swift; sourceTree = "<group>"; };
+		D5B200DC2B8CF6E30042D5C8 /* SegmentedPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedPicker.swift; sourceTree = "<group>"; };
 		D5B94B6A2B7D64DD0057B3F1 /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
 		D5B94B6C2B7D65CD0057B3F1 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
 		D5B94B6E2B7D69EE0057B3F1 /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
@@ -56,6 +61,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5B200D52B8CEE1F0042D5C8 /* SwiftUIIntrospect in Frameworks */,
+				D5B200D72B8CEE1F0042D5C8 /* SwiftUIIntrospect-Dynamic in Frameworks */,
+				D5B200D92B8CEE1F0042D5C8 /* SwiftUIIntrospect-Static in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -110,6 +118,7 @@
 				D523F7362AE2ABCD001DAEC1 /* DeadlineListCell.swift */,
 				D5B0183A2B7AB6FC0023AC88 /* GaugeView.swift */,
 				D59B6C162B7BD506003BB93F /* CardComponent.swift */,
+				D5B200DC2B8CF6E30042D5C8 /* SegmentedPicker.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -162,6 +171,11 @@
 			dependencies = (
 			);
 			name = DeadlineTracker;
+			packageProductDependencies = (
+				D5B200D42B8CEE1F0042D5C8 /* SwiftUIIntrospect */,
+				D5B200D62B8CEE1F0042D5C8 /* SwiftUIIntrospect-Dynamic */,
+				D5B200D82B8CEE1F0042D5C8 /* SwiftUIIntrospect-Static */,
+			);
 			productName = DeadlineTracker;
 			productReference = D523F7202AE2AA96001DAEC1 /* DeadlineTracker.app */;
 			productType = "com.apple.product-type.application";
@@ -190,6 +204,9 @@
 				Base,
 			);
 			mainGroup = D523F7172AE2AA95001DAEC1;
+			packageReferences = (
+				D5B200D32B8CEE1F0042D5C8 /* XCRemoteSwiftPackageReference "swiftui-introspect" */,
+			);
 			productRefGroup = D523F7212AE2AA96001DAEC1 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -226,6 +243,7 @@
 				D59B6C172B7BD506003BB93F /* CardComponent.swift in Sources */,
 				D5B94B712B8103460057B3F1 /* FirstTabView.swift in Sources */,
 				D5B94B732B8103880057B3F1 /* RouterView.swift in Sources */,
+				D5B200DD2B8CF6E40042D5C8 /* SegmentedPicker.swift in Sources */,
 				D523F7342AE2AB31001DAEC1 /* MainPage.swift in Sources */,
 				D523F73A2AE2B6C4001DAEC1 /* AddDeadlineSheetView.swift in Sources */,
 				D523F7372AE2ABCD001DAEC1 /* DeadlineListCell.swift in Sources */,
@@ -438,6 +456,35 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D5B200D32B8CEE1F0042D5C8 /* XCRemoteSwiftPackageReference "swiftui-introspect" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/siteline/swiftui-introspect";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D5B200D42B8CEE1F0042D5C8 /* SwiftUIIntrospect */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D5B200D32B8CEE1F0042D5C8 /* XCRemoteSwiftPackageReference "swiftui-introspect" */;
+			productName = SwiftUIIntrospect;
+		};
+		D5B200D62B8CEE1F0042D5C8 /* SwiftUIIntrospect-Dynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D5B200D32B8CEE1F0042D5C8 /* XCRemoteSwiftPackageReference "swiftui-introspect" */;
+			productName = "SwiftUIIntrospect-Dynamic";
+		};
+		D5B200D82B8CEE1F0042D5C8 /* SwiftUIIntrospect-Static */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D5B200D32B8CEE1F0042D5C8 /* XCRemoteSwiftPackageReference "swiftui-introspect" */;
+			productName = "SwiftUIIntrospect-Static";
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D523F7182AE2AA95001DAEC1 /* Project object */;
 }

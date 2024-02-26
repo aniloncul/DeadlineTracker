@@ -19,6 +19,15 @@ struct AddDeadlineSheetView: View {
     @State var selectedImportance: Item.Importance = .lessImportant
     @State var selectedDeadlineType: Item.DeadlineType = .socialEvent
     
+    @State var selectedRepeat = "Everyday"
+    @State private var showOptions: Bool = false
+    @State private var showDays: Bool = false
+    @State private var toggleOperator: Bool = false
+    
+    
+    let repeatTypes = ["Everyday", "Every Week Day", "Every Weekend","Selected Days"]
+
+    
      
     private let dateRange: ClosedRange<Date> = {
         let calendar = Calendar.current
@@ -32,81 +41,130 @@ struct AddDeadlineSheetView: View {
     
     
     var body: some View {
-        
-        Form{
-            
-           
-            Section {
-                HStack(spacing: 20) {
-                    Circle().fill(selectedDeadlineType.selectedDeadlineTypeColor).frame(width: 15)
-                    Picker("Deadline Type:", selection:
-                            $selectedDeadlineType) {
-                        ForEach(Item.DeadlineType.allCases, id: \.self) { category in
-                            Text(category.selectedDeadlineTypeString)
-                                .tag(category)
+        NavigationView {
+            ZStack {
+                Form{
+                    
+                    
+                    Section {
+                        HStack(spacing: 20) {
+                            Circle().fill(selectedDeadlineType.selectedDeadlineTypeColor).frame(width: 15)
+                            Picker("Deadline Type:", selection:
+                                    $selectedDeadlineType) {
+                                ForEach(Item.DeadlineType.allCases, id: \.self) { category in
+                                    Text(category.selectedDeadlineTypeString)
+                                        .tag(category)
+                                    
+                                }
+                            }
+                                    .pickerStyle(.menu)
                             
                         }
+                        TextField("Enter your deadline",
+                                  text: $deadline
+                        )
+                        
+                        .padding(EdgeInsets(top: 12, leading: 12, bottom: 12, trailing: 12))
+                        .font(.headline).keyboardType(.default)
                     }
-                            .pickerStyle(.menu)
+                    
+                    
+                    
+                    Section {
+                        
+                        DatePicker(
+                            "Select Deadline",
+                            selection: $deadlineDate,
+                            in: dateRange,
+                            displayedComponents: [.date, .hourAndMinute]
+                        ).datePickerStyle(.compact)
+                       
+                        
+                        Picker("Repeat", selection: $selectedRepeat) {
+                            ForEach(repeatTypes, id: \.self) { repeattype in
+                                Text(repeattype).tag(repeattype)
+                            }
+                        }.onChange(of: selectedRepeat) {_ in
+                            showOptions = true
+                        }
+                        
+                        if showOptions {
+                            Section {
+                                DisclosureGroup("additional options") {
+                                    Text("anan")
+                                    Text("baban")
+                                }
+                            }
+                        }
+                        
+                        
+                        
+                    }
+                    
+                                    
+
+                    Section {
+                        Picker("Importance", selection: $selectedImportance) {
+                            ForEach(Item.Importance.allCases, id: \.self) { importance in
+                                Text(importance.selectedImportant)
+                                
+                                    .tag(importance)
+                                    
+                                    
+                            }
+                            
+                        }
+                        
+                        .pickerStyle(.segmented)
+                        .tint(.white)
+                    }
+                    .hSpacing(.topLeading)
+                    
+                    Section {
+                        Toggle("repeat", isOn: $toggleOperator)
+                        
+                        if toggleOperator {
+                            Picker("Repeat", selection: $selectedRepeat) {
+                                ForEach(repeatTypes, id: \.self) { repeattype in
+                                    Text(repeattype).tag(repeattype)
+                                }
+                            }.pickerStyle(.inline)
+                                
+//                            Section {
+//                                DisclosureGroup("additional options") {
+//                                    Text("anan")
+//                                    Text("baban")
+//                                }
+//                            }
+                        }
+                    }
+                    
                     
                 }
-            }
-         
-            
-            
-            Section {
-                TextField("Enter your deadline",
-                          text: $deadline
-                )
-                
                 .padding(EdgeInsets(top: 12, leading: 12, bottom: 12, trailing: 12))
-                .font(.headline).keyboardType(.default)
-            }
-                Section {
+                .toolbar {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            addItem()
+                            dismiss()
+                        } label: {
+                            Label("Save", systemImage: "")
+                        }
+                        
+                    }
+                    
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button {
+                            dismiss()
+                        } label: {
+                            Label("Cancel", systemImage: "")
+                        }
+                        
+                    }
+                }.navigationTitle("New Deadline")
                 
-                DatePicker(
-                    "Select Deadline",
-                    selection: $deadlineDate,
-                    in: dateRange,
-                    displayedComponents: [.date, .hourAndMinute]
-                ).datePickerStyle(.compact)
             }
-            
-            Section {
-                Picker("Importance", selection: $selectedImportance) {
-                    ForEach(Item.Importance.allCases, id: \.self) { importance in
-                        Text(importance.selectedImportant)
-                            .tag(importance)
-                             
-                   }
-                             
-                }
-                .pickerStyle(.segmented)
-                .background(
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(Color.teal)
-                )
-                .tint(.white)
-          }
-            .hSpacing(.topLeading)
-            
-            
-            Button(action: {
-                addItem()
-                dismiss()
-            }) {
-                Text("Save")
-                    .foregroundColor(.blue)
-                    .frame(maxWidth: .infinity)
-            }
-            .padding(30)
-            
         }
-        .border(Color.red)
-        .padding(EdgeInsets(top: 12, leading: 12, bottom: 12, trailing: 12))
-        Text(deadline)
-        
-        
     }
 
     

@@ -14,8 +14,13 @@
 
 import SwiftUI
 import SwiftData
+import SwiftUIIntrospect
 
-
+struct Book: Identifiable, Hashable {
+    var id: UUID { UUID() }
+    var title: String
+    var author: String
+}
 
 struct FirstTabView: View {
     @Environment(\.modelContext) private var modelContext
@@ -38,7 +43,7 @@ struct FirstTabView: View {
     
     
     
-    @State private var deadlineHeaderPicker: DeadlineHeader = .Today
+    @State private var deadlineHeaderPicker: DeadlineHeader?
     
     private var colorArray = [Color.blue, Color.gray, Color.indigo, Color.cyan ]
     
@@ -47,34 +52,86 @@ struct FirstTabView: View {
     var pagingControlSpacing: CGFloat = 20
     var spacing: CGFloat = 10
     
+    init() {
+        UISegmentedControl.appearance().selectedSegmentTintColor = .black
+        
+        let attributes: [NSAttributedString.Key:Any] = [
+            .foregroundColor : UIColor.white
+        ]
+        
+        UISegmentedControl.appearance().setTitleTextAttributes(attributes, for: .selected)
+    }
+    
     var body: some View {
+        
+        
         NavigationView {
             VStack {
                 
+                
+                //                            Picker("Select Deadline", selection: $deadlineHeaderPicker) {
+                //                                Text("Today").tag(DeadlineHeader.Today)
+                //                                Text("Upcoming").tag(DeadlineHeader.Upcoming)
+                //                                Text("Overdue").tag(DeadlineHeader.Overdue)
+                //
+                //                            }
+                //
+                //                            .listRowInsets(.init())
+                //                            .listRowBackground(Color.clear)
+                //                            .pickerStyle(SegmentedPickerStyle())
+                //                            .pickerStyle(.segmented)
+                //                            .introspect(.picker(style: .segmented), on: .iOS(.v17)) {segmentedControl in
+                //
+                //                                segmentedControl.layer.cornerRadius = 12
+                //                                segmentedControl.layer.borderColor = UIColor(red: 170.0/255.0, green: 170.0/255.0, blue: 170.0/255.0, alpha: 1.0).cgColor
+                //                                segmentedControl.layer.borderWidth = 0
+                //                                segmentedControl.layer.masksToBounds = true
+                //
+                //                                segmentedControl.clipsToBounds = true}
+                //
+                
                 VStack {
+                    //MARK: - SegmentedPicker
+                        SegmentedPicker(
+                            selection: $deadlineHeaderPicker,
+                            items: Binding(
+                                get: { [DeadlineHeader.Today, .Upcoming, .Overdue] },
+                                set: { _ in }
+                            ),
+                            selectionColor: .black
+                        ) { header in
+                            Text(header == .Today ? "Today" : (header == .Upcoming ? "Upcoming" : "Overdue"))
+                    }
+                    
                     //MARK: - Header
                     VStack{
-                        HStack(alignment: .center, spacing: 10) {
+                        HStack(alignment: .center) {
                             Group {
-                                VStack {
+                                VStack(alignment: .center) {
                                     Text("\(Date().formatted(.dateTime.weekday(.wide)))")
                                         .font(Font.custom("Grayfeld-Condensed-Book.otf", size: 20))
+                                        .fontWeight(.thin)
                                         .hSpacing(.topLeading)
                                     Text("\(Date(), formatter: customDateFormatter)")
-                                        .font(Font.custom("Grayfeld-Condensed-Book.otf", size: 48).bold())
+                                        
+                                        .font(Font.custom("Grayfeld-Condensed-Book.otf", size: 56))
                                         .hSpacing(.topLeading)
                                     Text("\(Date(), formatter: MMMFormatter)")
-                                        .font(Font.custom("Grayfeld-Condensed-Book.otf", size: 48).bold())
+                                        .font(Font.custom("Grayfeld-Condensed-Book.otf", size: 56))
+                                        
                                         .textCase(.uppercase)
                                         .hSpacing(.topLeading)
                                 }
+                                .padding(.leading, 24)
+                               
                             }
-                            .padding(2)
-                            .padding(.leading, 16).frame(width: 160)
+//                            .padding(2)
+//                            .padding(.leading, 16)
                             
                             Rectangle()
-                                .frame(width: 1, height: 96)
+                                .frame(width: 1, height: 72)
                                 .foregroundColor(Color.black)
+                            
                             
                             
                             VStack(alignment: .trailing) {
@@ -87,60 +144,65 @@ struct FirstTabView: View {
                                     .padding(.trailing, 16)
                                 Text("Work Reminders: \(workReminders.count)")
                                     .padding(.trailing, 16)
-                            }
+                            }.hSpacing(.centerLastTextBaseline)
                         }
                     }
+                    
                     //MARK: - Start of ScrollView
                     
-                        ScrollView(.horizontal) {
-                            HStack {
-                            ForEach(Array(highImportantEvents.enumerated().sorted { $0.element.deadlineDate < $1.element.deadlineDate }), id: \.element.id) { (index, item) in
-                                let currentTimeInterval = item.deadlineDate.timeIntervalSince(Date())
-                                let formattedTime = formatTimeInterval(currentTimeInterval)
-                                
-                               
-                                    VStack {
-                                        Text( item.deadlineName)
-                                        Text("\(item.deadlineDate.formatted(.dateTime.day().month().year().hour().minute().second()))")
-                                        Text(  "\(formattedTime)")
-                                    }.background(RoundedRectangle(cornerRadius: 10).foregroundColor(colorArray[index % colorArray.count]))
-                               
-                           
-                            }
-                        }
-                    }
-            
+//                    ScrollView(.horizontal) {
+//                        HStack {
+//                            ForEach(Array(highImportantEvents.enumerated().sorted { $0.element.deadlineDate < $1.element.deadlineDate }), id: \.element.id) { (index, item) in
+//                                let currentTimeInterval = item.deadlineDate.timeIntervalSince(Date())
+//                                let formattedTime = formatTimeInterval(currentTimeInterval)
+//                                
+//                                
+//                                VStack {
+//                                    Text( item.deadlineName)
+//                                    Text("\(item.deadlineDate.formatted(.dateTime.day().month().year().hour().minute().second()))")
+//                                    Text(  "\(formattedTime)")
+//                                }.background(RoundedRectangle(cornerRadius: 10).foregroundColor(colorArray[index % colorArray.count]))
+//                                
+//                                
+//                            }
+//                        }
+//                    }
                     
+                    //MARK: - List
                     VStack(spacing: 24){
-                       
-                        
                         List {
-                            Picker("Select Deadline", selection: $deadlineHeaderPicker) {
-                                Text("Today").tag(DeadlineHeader.Today)
-                                Text("Upcoming").tag(DeadlineHeader.Upcoming)
-                                Text("Overdue").tag(DeadlineHeader.Overdue)
-                                
+                            Section {
+                                ForEach(Array(filteredItems.enumerated().sorted { $0.element.deadlineDate < $1.element.deadlineDate }), id: \.element.id) { (index, item) in
+                                    let currentDate = Date()
+                                    let startOfToday = Calendar.current.startOfDay(for: currentDate)
+                                    let currentTimeInterval = item.deadlineDate.timeIntervalSince(Date())
+                                    let maxTimeInterval = item.deadlineDate.timeIntervalSince(startOfToday)
+                                    let totalSeconds = Double(maxTimeInterval)
+                                    let formattedTime = formatTimeInterval(currentTimeInterval)
+                                    
+                                    DeadlineListCell(
+                                        title: item.deadlineName, deadlineTime: item.deadlineDate/*.formatted(.dateTime.day().month().year().hour().minute().second()))*/, timeIntervalDouble: currentTimeInterval, maxTimeInterval: totalSeconds, timeInterval: formattedTime, deadlineHour: item.deadlineDate.formatted(.dateTime.hour().minute()),  deadlineType: item.deadlineType.selectedDeadlineTypeString, deadlineTypeColor: item.deadlineType.selectedDeadlineTypeColor, importance: item.importance.rawValue, deadline: item.deadlineDate
+                                    )
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                    .background(RoundedRectangle(cornerRadius: 18).foregroundColor(colorArray[index % colorArray.count]))
+                                }
+                                .onDelete(perform: deleteItems)
                             }
-                            .pickerStyle(.segmented)
-                            ForEach(Array(filteredItems.enumerated().sorted { $0.element.deadlineDate < $1.element.deadlineDate }), id: \.element.id) { (index, item) in
-                                let currentDate = Date()
-                                let startOfToday = Calendar.current.startOfDay(for: currentDate)
-                                let currentTimeInterval = item.deadlineDate.timeIntervalSince(Date())
-                                let maxTimeInterval = item.deadlineDate.timeIntervalSince(startOfToday)
-                                let totalSeconds = Double(maxTimeInterval)
-                                let formattedTime = formatTimeInterval(currentTimeInterval)
-                                
-                                DeadlineListCell(
-                                    title: item.deadlineName, deadlineTime: item.deadlineDate/*.formatted(.dateTime.day().month().year().hour().minute().second()))*/, timeIntervalDouble: currentTimeInterval, maxTimeInterval: totalSeconds, timeInterval: formattedTime, deadlineHour: item.deadlineDate.formatted(.dateTime.hour().minute()),  deadlineType: item.deadlineType.selectedDeadlineTypeString, deadlineTypeColor: item.deadlineType.selectedDeadlineTypeColor, importance: item.importance.rawValue, deadline: item.deadlineDate
-                                )
-                                .background(RoundedRectangle(cornerRadius: 10).foregroundColor(colorArray[index % colorArray.count]))
-                                
-                              
-                            }
-                            .onDelete(perform: deleteItems)
+                            
                         }
-                    }
-                    .padding(12)
+                        .listStyle(PlainListStyle())
+                       
+                   }
+                    .background(Color(red: 0.99, green: 0.99, blue: 0.99))
+                    .clipShape(
+                        .rect(
+                                topLeadingRadius: 40,
+                                bottomLeadingRadius: 0,
+                                bottomTrailingRadius: 0,
+                                topTrailingRadius: 40
+                            )
+                    )
+                    .padding(0)
                     .toolbar {
                         ToolbarItem(placement: .navigationBarTrailing) {
                             EditButton()
@@ -151,10 +213,10 @@ struct FirstTabView: View {
                             }
                         }
                     }
-                    
-                    
+                     
                 }
-            }
+            }.background(Color(red: 0.82, green: 0.82, blue: 0.82))
+          
             .sheet(isPresented: $showLanguageListView, content: {
                 AddDeadlineSheetView()
             })
@@ -191,6 +253,8 @@ struct FirstTabView: View {
             return items.filter { $0.deadlineDate >= startOfNextDay }
         case .Overdue:
             return items.filter { $0.deadlineDate < Date() }
+        case .none:
+            return items.filter { Calendar.current.isDateInToday($0.deadlineDate) && $0.deadlineDate > Date() }
         }
     }
     

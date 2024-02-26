@@ -85,6 +85,8 @@ struct DeadlineListCell: View {
                     )
                 )
                 .padding(12)
+                
+                
             }
             
              if !deadlinePassed {
@@ -94,6 +96,8 @@ struct DeadlineListCell: View {
         }.onReceive(timer, perform: { _ in
             withAnimation {
                 updateTimeRemaining()
+                
+                
             }
         }
         )
@@ -134,22 +138,19 @@ struct DeadlineListCell: View {
             interval = "\(hour) hours \(minute) minutes \(second) seconds "
         }
         
+        if timeIntervalDouble > 0 {
+                timeIntervalDouble -= 1
+            }
+        
+        
         
     }
     
+
     
  
     }
-//    func calculateRemainingTime() -> String {
-//        let remainingTime = timeIntervalDouble - NSDate.timeIntervalSinceReferenceDate
-//        let timeRemaining = max(remainingTime, 0)
-//        
-//        // Convert timeRemaining to a user-friendly format (e.g., hours, minutes, seconds).
-//        let formatter = DateComponentsFormatter()
-//        formatter.allowedUnits = [.hour, .minute, .second]
-//        formatter.unitsStyle = .abbreviated
-//        return formatter.string(from: timeRemaining) ?? "Expired"
-//    }
+   
     
     
 
